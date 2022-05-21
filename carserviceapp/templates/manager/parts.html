@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %} Добавить детали -{% endblock %}
+{% block content %}
+<h1 align="center">Используемые детали</h1>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th># детали</th>
+            <th>Артикул</th>
+            <th># ремонта</th>
+            <th>Цена</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {% if selected_repair %}
+        {% for part in selected_repair.parts %}
+        <tr>
+            <td>{{ part.id }}</td>
+            <td>{{ part.vendor_code }}</td>
+            <td>{{ selected_repair.id }}</td>
+            <td>{{ selected_repair.price }}</td>
+        </tr>
+        {% endfor %}
+        {% endif %}
+    </tbody>
+</table>
+
+<br><br>
+
+<form method="POST" >
+    <div class="form-group">
+        <label for="repair_id">ID ремонта</label>
+        <select class="form-control" name="repair" id="repair">
+            {% for repair in repairs %}
+            <option value="{{ repair.id }}">{{ repair.id }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <button type="submit" class="btn btn-secondary">Показать</button>
+    </div>
+</form>
+
+<br><br>
+
+
+{% endblock %}

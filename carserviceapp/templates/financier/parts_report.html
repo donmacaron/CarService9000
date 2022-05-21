@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %} Отчёт по деталям -{% endblock %}
+{% block content %}
+
+<h1 align="center">Отчёт по деталям</h1>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Артикул</th>
+            <th>Название</th>
+            <th>Количество</th>
+            <th>Использовано</th>
+            <th>Цена</th>
+            <th>Страна</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if parts %}
+        {% for part in parts %}
+        <tr>
+            <td>{{ part.vendor_code }}</td>
+            <td>{{ part.name }}</td>
+            <td>{{ part.amount }}</td>
+            <td>{{ part.discontinued }}</td>
+            <td>{{ part.price }}</td>
+            <td>{{ part.country }}</td>
+        </tr>
+        {% endfor %}
+        {% endif %}
+    </tbody>
+</table>
+
+<br><br>
+
+<form method='POST' class="center-form">
+    <h3 align="center">Поиск по стоимости</h3>
+    <br>
+    <div class="input-group mb-3" name="show-table">
+        <span class="input-group-text">От</span>
+        <input type="text" value="0" class="form-control" name="from" id="from" oninput="this.value = this.value.replace(/[^0-9.]/g,
+                                '').replace(/(\..*)\./g, '$1');">
+        <span class="input-group-text">До</span>
+        <input type="text" value="0" class="form-control" name="to" id="to" oninput="this.value = this.value.replace(/[^0-9.]/g,
+                                '').replace(/(\..*)\./g, '$1');">
+
+        <button class="btn btn-outline-secondary" type="submit" id="price_search" name="price_search">Показать</button>
+        <button class="btn btn-outline-secondary" type="submit" id="show_all" name="show_all">Показать все</button>
+    </div>
+</form>
+
+<br><br>
+
+<div class="row">
+    <div class="col"><strong>
+            <strong>Израсходованно деталей:</strong> {{ used_parts }}
+            <br>
+            <strong>На сумму:</strong> {{ wasted_on_parts }}
+        </strong></div>
+</div>
+
+{% endblock %}

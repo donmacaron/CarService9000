@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% block title %} Добавить ремонты -{% endblock %}
+{% block content %}
+
+<h1 align="center">Ремонт</h1>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th># ремонта</th>
+            <th># клиента</th>
+            <th>Имя клиента</th>
+            <th>Автомобиль Клиента</th>
+            <th># мастера</th>
+            <th>Имя мастера</th>
+            <th>Дата</th>
+            <th>Статус</th>
+            <th>Цена</th>
+            <td> </td>
+        </tr>
+    </thead>
+    <tbody>
+        {% if repairs %}
+        {% for repair in repairs %}
+        <tr>
+            <td>{{ repair.id }}</td>
+            <td>{{ repair.client_id }}</td>
+            <td> {{ clients[repair.client_id-1].name }} </td>
+            <td> {{ clients[repair.client_id-1].car }} </td>
+            <td>{{ repair.master_id }}</td>
+            <td> {{ masters[repair.master_id-1].name }} </td>
+            <td>{{ repair.date.strftime('%d/%m/%Y') }}</td>
+            <td>{{ repair.status }}</td>
+            <td>{{ repair.price }}</td>
+            <td> {% if repair.status != 'Готово' %}<button type="button" class="btn-close" onclick="repairDone({{ repair.id }})" aria-label="Close"></button>{% else %} {% endif %} </td>
+        </tr> 
+        {% endfor %}
+        {% endif %}
+    </tbody>
+</table>
+
+<br><br>
+
+<div align="center">
+    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#staticBackdrop"> Добавить
+    </button>
+</div>
+
+<br><br>
+
+<form method='POST' class="center-form">
+    <h3 align="center">Поиск по дате</h3>
+    <br>
+    <div class="input-group mb-3" name="show-table">
+        <span class="input-group-text">От</span>
+        <input type="date" class="form-control" name="from" id="from">
+        <span class="input-group-text">До</span>
+        <input type="date" class="form-control" name="to" id="to">
+
+        <button class="btn btn-outline-secondary" type="submit" id="date_search" name="date_search">Поиск</button>
+        <button class="btn btn-outline-secondary" type="submit" id="show_all" name="show_all">Показать все</button>
+    </div>
+</form>
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="POST">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Добавление ремонта</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="client">Имя клиента</label>
+                        <select class="form-control" name="client" id="client">
+                            {% for client in clients %}
+                            <option value="{{ client.id }}">{{ client.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label for="service">Услугa</label>
+                        <select class="form-control" name="service" id="service">
+                            {% for service in services %}
+                            <option value="{{ service.id }}">{{ service.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <br>
+                    <br>
+                    <div class="form-group">
+                        <label for="service">Деталь</label>
+                        <select class="form-select" name="part" id="part" multiple aria-label="multiple select example">
+                            {% for part in parts %}
+                            <option value="{{ part.id }}">{{ part.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="master">Мастер</label>
+                        <select class="form-control" name="master" id="master">
+                            {% for master in masters %}
+                            <option value="{{ master.id }}">{{ master.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <button type="submit" class="btn btn-primary">Добавить</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('from').value = new Date().toISOString().substring(0, 10);
+    document.getElementById('to').value = new Date().toISOString().substring(0, 10);
+</script>
+{% endblock %}

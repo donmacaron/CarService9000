@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %} Статистика -{% endblock %}
+{% block content %}
+<h1 align="center">Статистика</h1>
+<p align="center">
+    <div>
+        <img src="{{ url_for('static', filename='/graphs/graph1.png') }}" class="img-fluid" alt="">
+    </div>
+    <br><br>
+    <div>
+        <img src="{{ url_for('static', filename='/graphs/graph2.png') }}" class="img-fluid" alt="">
+    </div>
+    <br><br>
+    <div>
+        <img src="{{ url_for('static', filename='/graphs/graph3.png') }}" class="img-fluid" alt="">
+    </div>
+</p>
+
+<br><br>
+
+
+{% endblock %}

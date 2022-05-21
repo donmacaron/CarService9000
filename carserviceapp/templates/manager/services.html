@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %} Услуги -{% endblock %}
+{% block content %}
+<h1 align="center">Услуги</h1>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th># услуги</th>
+            <th>Наименование</th>
+            <th>Цена</th>
+        </tr>
+    </thead>
+    <tbody>
+       {% for service in services %}
+        <tr>
+            <td>{{ service.id }}</td>
+            <td>{{ service.name }}</td>
+            <td>{{ service.price }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<br><br>
+
+<form method='POST' class="center-form">
+<h3 align="center">Поиск по стоимости</h3>
+<br>
+<div class="input-group mb-3" name="show-table">
+    <span class="input-group-text">От</span>
+    <input type="text" value="0" class="form-control" name="from" id="from" oninput="this.value = this.value.replace(/[^0-9.]/g,
+                                '').replace(/(\..*)\./g, '$1');">
+    <span class="input-group-text">До</span>
+    <input type="text" value="0" class="form-control" name="to" id="to" oninput="this.value = this.value.replace(/[^0-9.]/g,
+                                '').replace(/(\..*)\./g, '$1');">
+    
+    <button class="btn btn-outline-secondary" type="submit" id="price_search" name="price_search">Показать</button>
+    <button class="btn btn-outline-secondary" type="submit" id="show_all" name="show_all">Показать все</button>
+    </div>
+</form>
+
+<br><br>
+
+<form method='POST' class="center-form">
+    <h3 align="center">Поиск по названию</h3>
+    <br>
+    <div class="input-group mb-3" name="show-table">
+        <input type="text" placeholder="..." class="form-control" name="to_find" id="to_find">
+
+        <button class="btn btn-outline-secondary" type="submit" id="name_search" name="name_search">Найти</button>
+    </div>
+</form>
+
+
+{% endblock %}

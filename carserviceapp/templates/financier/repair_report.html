@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %} Отчёт по ремонтам -{% endblock %}
+{% block content %}
+
+<h1 align="center">Отчёт по ремонту</h1>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th># ремонта</th>
+            <th># клиента</th>
+            <th>Автомобиль</th>
+            <th># мастера</th>
+            <th>Цена</th>
+            <th>Статус</th>
+            <th>Дата</th>
+            <th># услуги</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if repairs %}
+        {% for repair in repairs %}
+        <tr>
+            <td>{{ repair.id }}</td>
+            <td>{{ repair.client_id }}</td>
+            <td>{{ clients[repair.client_id-1].car }}</td>
+            <td>{{ repair.master_id }}</td>
+            <td>{{ repair.price }}</td>
+            <td>{{ repair.status }}</td>
+            <td>{{ repair.date.strftime('%d/%m/%Y') }}</td>
+            <td>{{ repair.service_id }}</td>
+        </tr>
+        {% endfor %}
+        {% endif %}
+    </tbody>
+</table>
+
+<br><br>
+
+<form method='POST' class="center-form">
+    <h3 align="center">Поиск по дате</h3>
+    <br>
+    <div class="input-group mb-3" name="show-table">
+        <span class="input-group-text">От</span>
+        <input type="date" class="form-control" name="from" id="from">
+        <span class="input-group-text">До</span>
+        <input type="date" class="form-control" name="to" id="to">
+
+        <button class="btn btn-outline-secondary" type="submit" id="date_search" name="date_search">Поиск</button>
+        <button class="btn btn-outline-secondary" type="submit" id="show_all" name="show_all">Показать все</button>
+    </div>
+</form>
+
+<br><br>
+
+<form method="POST">
+    <div class="form-group">
+        <h3 align="center">Поиск по мастеру</h3>
+
+        <select class="form-control" name="master" id="master">
+            {% for master in masters %}
+            <option value="{{ master.id }}"># {{ master.id }} / {{ master.name }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <button type="submit" class="btn btn-secondary" id="master_search" name="master_search">Показать</button>
+    </div>
+</form>
+    
+<br><br>
+
+<div class="row">
+    <div class="col"><strong>Средний чек:</strong> {{ earnings }}</div>
+</div>
+
+<br><br>
+
+<script>
+    document.getElementById('from').value = new Date().toISOString().substring(0, 10);
+    document.getElementById('to').value = new Date().toISOString().substring(0, 10);
+</script>
+
+
+{% endblock %}

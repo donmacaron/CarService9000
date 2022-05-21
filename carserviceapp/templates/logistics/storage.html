@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+{% block title %} Склад -{% endblock %}
+{% block content %}
+<h1 align="center">Детали</h1>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Артикул</th>
+            <th>Название</th>
+            <th>Количество</th>
+            <th>Цена</th>
+            <th>Страна</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for part in parts %}
+        <tr>
+            <td>{{ part.vendor_code }}</td>
+            <td>{{ part.name }}</td>
+            <td>{{ part.amount }}</td>
+            <td>{{ part.price }}</td>
+            <td>{{ part.country }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<br><br>
+
+<form method='POST' class="center-form">
+    <h3 align="center">Поиск по стоимости/стране</h3>
+    <br>
+    <div class="input-group mb-3" name="show-table">
+        <span class="input-group-text">От</span>
+        <input type="text" value="0" class="form-control" name="from" id="from" oninput="this.value = this.value.replace(/[^0-9.]/g,
+                                '').replace(/(\..*)\./g, '$1');">
+        <span class="input-group-text">До</span>
+        <input type="text" value="0" class="form-control" name="to" id="to" oninput="this.value = this.value.replace(/[^0-9.]/g,
+                                '').replace(/(\..*)\./g, '$1');">
+
+        <select class="form-control" name="country_search" id="country_search" placeholder="Поиск по стране">
+            <option disabled selected>Поиск по стране</option>
+            {% for country in countries %}
+            <option value="{{ country }}">{{ country }}</option>
+            {% endfor %}
+        </select>
+        <button class="btn btn-outline-secondary" type="submit" id="price_search" name="price_search">Показать</button>
+    </div>
+</form>
+
+<br><br>
+
+<form method='POST' class="center-form">
+    <h3 align="center">Поиск по названию</h3>
+    <br>
+    <div class="input-group mb-3" name="show-table">
+        <input type="text" placeholder="..." class="form-control" name="to_find" id="to_find">
+
+        <button class="btn btn-outline-secondary" type="submit" id="name_search" name="name_search">Найти</button>
+    </div>
+</form>
+
+<br><br>
+
+<div class="row">
+    <div class="col-6 mx-auto">
+        <div class="d-flex align-items-center justify-content-evenly">
+            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Обновить склад</button>
+            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#staticBackdrop2">Добавить деталь</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method='POST'>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Обновление склада</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <br>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="part_id">Выбрать деталь</label>
+                        <select name="part_id" id="part_id" class="form-control">
+                            {% for part in parts %}
+                            <option value="{{ part.id }}" selected="selected">{{ part.vendor_code }} - {{ part.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label for="amount">Количество</label>
+                        <input type="text" value="0" class="form-control" id="amount" name="amount" oninput="this.value = this.value.replace(/[^0-9.]/g,
+                                                    '').replace(/(\..*)\./g, '$1');">
+                    </div>
+                </div>
+                    <div class="modal-footer">
+                        <div class="row">
+                            <div class="col-6 mx-auto">
+                                <div class="d-flex align-items-center justify-content-evenly">
+                                    <button type="submit" class="btn btn-success" id="add" name="add">Добавить</button>
+                                    <button type="submit" class="btn btn-warning" id="subtract" name="subtract">Списать</button>
+                                    <button type="submit" class="btn btn-danger" id="discontinue" name="discontinue">Удалить</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Modal 2 -->
+<div class="modal fade" id="staticBackdrop2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="POST">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Добавление новой детали</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    
+                        <label for="vendor_code">Артикул</label>
+                        <input type="text" class="form-control" id="vendor_code" name="vendor_code" required="required" />
+                        <br>
+                    
+                        <label for="name">Название</label>
+                        <input type="text" class="form-control" id="name" name="name" required="required" />
+                        <br>
+                    
+                        <label for="phone">Цена</label>
+                        <input type="text" class="form-control" id="price" name="price" required="required" maxlength="11" oninput="this.value = this.value.replace(/[^0-9.]/g,'').replace(/(\..*)\./g, '$1');" />
+                        <br>
+                    
+                        <label for="country">Страна</label>
+                        <input type="text" class="form-control" id="country" name="country" required="required" />
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Закрыть</button>
+                    <button type="submit" class="btn btn-primary" name="new_part" id="new_part">Добавить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<br><br>
+
+{% endblock %}
